@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>A Special Message</title>
     <style>
+        :root {
+            --glow-pink: #ff007f;
+            --light-pink: #ff7fbf;
+            --dark-blue: #0d0221;
+        }
+
         body, html {
             margin: 0;
             padding: 0;
@@ -16,31 +22,51 @@
             font-family: 'Garamond', 'Times New Roman', serif;
         }
 
-        #background-canvas {
+        #video-background {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
             z-index: 1;
+            transform: translateX(-50%) translateY(-50%);
+            object-fit: cover;
+            opacity: 0.7;
         }
 
-        .message-container {
+        .message-container-wrapper {
             position: fixed;
             bottom: 8vh;
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
-            text-align: center;
             width: 90%;
             max-width: 450px;
+            padding: 4px; /* Space for the border */
+            border-radius: 24px;
+            background: linear-gradient(var(--angle), var(--glow-pink), #4a00e0, #8e2de2, var(--glow-pink));
+            animation: rotate-border 6s linear infinite;
+        }
+
+        @property --angle {
+          syntax: '<angle>';
+          initial-value: 0deg;
+          inherits: false;
+        }
+
+        @keyframes rotate-border {
+            to { --angle: 360deg; }
+        }
+
+        .message-container {
             padding: 20px;
-            background: rgba(0, 0, 0, 0.25);
-            border-radius: 20px;
-            backdrop-filter: blur(7px);
-            -webkit-backdrop-filter: blur(7px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: background-color 0.5s;
+            background: rgba(13, 2, 33, 0.7); /* dark-blue with opacity */
+            border-radius: 22px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            text-align: center;
         }
 
         .silver-text {
@@ -79,12 +105,12 @@
         }
         
         .action-button {
-            color: #f0f8ff;
+            color: var(--light-pink);
             font-size: 1.1em;
             font-weight: bold;
             font-family: sans-serif;
             background-color: transparent;
-            border: 2px solid #f0f8ff;
+            border: 2px solid var(--light-pink);
             border-radius: 10px;
             position: relative;
             padding: 12px 25px;
@@ -92,14 +118,14 @@
             margin-top: 15px;
             letter-spacing: 0.1em;
             transition: all 0.3s ease-in-out;
-            text-shadow: 0 0 5px #f0f8ff;
+            text-shadow: 0 0 8px var(--glow-pink);
             min-width: 220px;
         }
 
         .action-button:hover {
             color: #000;
-            background-color: #f0f8ff;
-            box-shadow: 0 0 15px 5px #f0f8ff;
+            background-color: var(--light-pink);
+            box-shadow: 0 0 20px 5px var(--glow-pink);
             transform: scale(1.05);
         }
 
@@ -112,54 +138,60 @@
 </head>
 <body>
 
-    <canvas id="background-canvas"></canvas>
+    <video autoplay muted loop playsinline id="video-background"></video>
 
-    <div class="message-container">
-        <p class="silver-text">For My Best Friend</p>
-        <p class="silver-text">A special message just for you.</p>
-        <div id="golden-text-container">
-            <span id="golden-text">SIYA Jii</span>
+    <div class="message-container-wrapper">
+        <div class="message-container">
+            <p class="silver-text">For My Best Friend</p>
+            <p class="silver-text">A special message just for you.</p>
+            <div id="golden-text-container">
+                <span id="golden-text">SIYA Jii</span>
+            </div>
+            
+            <button class="action-button" id="main-button">
+                Play Special Song
+            </button>
         </div>
-        
-        <button class="action-button" id="main-button">
-            Play Special Song
-        </button>
     </div>
 
     <script>
-        // --- ALL-IN-ONE SCRIPT (DUAL AUDIO VERSION) ---
+        // --- ALL-IN-ONE SCRIPT (VIDEO & DUAL AUDIO) ---
         const mainButton = document.getElementById('main-button');
         const goldenText = document.getElementById('golden-text');
+        const videoBackground = document.getElementById('video-background');
 
-        // --- 1. The Embedded Audio Files ---
-        // Both songs are converted to text (Base64) to guarantee they load.
+        // --- 1. Embedded Assets (Video & Audio as Base64 text) ---
+        // NOTE: The Base64 strings are extremely long. They contain the entire media file.
+        // This is a placeholder for a real aurora video. A real one would be many thousands of lines long.
+        const videoData = "data:video/mp4;base64,AAAAIGZ0eXAvbXA0MgAAAChtNA..."; // THIS IS A SHORT PLACEHOLDER. The real data is huge.
         const backgroundAudioData = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjQ1LjEwMAAAAAAAAAAAAAAA//uQxAADEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANrQnsKACEAAAAAAAAAB9D//uQxAADEAAANIAAAA9EAAAAATEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//uQxAADIAAANIAAAA9EAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//uQxAADNAAANIAAAA9EAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV";
-        const specialAudioData = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjQ1LjEwMAAAAAAAAAAAAAAA//uQxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAFAAAEABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV... (This is a sample of a much longer data string)";
+        const specialAudioData = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjQ1LjEwMAAAAAAAAAAAAAAA//uQxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAFAAAEABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV... (Placeholder)";
+
+        videoBackground.src = videoData;
 
         const backgroundSong = new Audio(backgroundAudioData);
         backgroundSong.loop = true;
-        backgroundSong.volume = 0.5;
+        backgroundSong.volume = 0.4;
 
         const specialSong = new Audio(specialAudioData);
-        specialSong.loop = false; // The special song probably shouldn't loop
+        specialSong.loop = false;
 
         let isSpecialSongActive = false;
         let hasInteracted = false;
 
-        // --- 2. The Advanced Interaction Logic ---
+        // --- 2. Advanced Audio Control Logic ---
         mainButton.addEventListener('click', () => {
             if (!hasInteracted) {
-                // First ever click
+                backgroundSong.play().catch(e => {}); // Play muted bg song
+                specialSong.play().catch(e => {}); // Play muted special song
+                backgroundSong.pause();
+                specialSong.pause();
                 hasInteracted = true;
-                playSpecialSong();
-            } else {
-                // Subsequent clicks
-                isSpecialSongActive ? playBackgroundSong() : playSpecialSong();
             }
+            isSpecialSongActive ? playBackgroundSong() : playSpecialSong();
         });
         
         specialSong.addEventListener('ended', () => {
-             // When special song finishes, go back to background song
             playBackgroundSong();
         });
 
@@ -177,18 +209,20 @@
             isSpecialSongActive = false;
             fade(specialSong, 0, () => specialSong.pause());
             backgroundSong.play();
-            fade(backgroundSong, 0.5);
+            fade(backgroundSong, 0.4);
             goldenText.classList.remove('glow');
             mainButton.textContent = 'Play Special Song';
         }
         
-        // --- 3. The Audio Fade Utility ---
         function fade(audio, targetVolume, callback) {
-            const fadeDuration = 1500; // 1.5 seconds
+            const fadeDuration = 1500;
             const steps = 30;
             const stepDuration = fadeDuration / steps;
+            if(audio.volume === targetVolume) {
+                if(callback) callback();
+                return;
+            }
             const volumeStep = (targetVolume - audio.volume) / steps;
-
             let currentStep = 0;
             const fadeInterval = setInterval(() => {
                 currentStep++;
@@ -202,100 +236,14 @@
             }, stepDuration);
         }
 
-        // Try to play background music on load (might be blocked by browser)
+        // Start background music automatically on load
         window.addEventListener('load', () => {
-            backgroundSong.play().then(() => {
-                hasInteracted = true; // Autoplay worked
-            }).catch(e => {
-                // Autoplay was blocked, user must click
-                console.log("Autoplay blocked. Waiting for user interaction.");
-            });
+            setTimeout(() => {
+                backgroundSong.play().catch(e => {
+                    console.log("Autoplay blocked. User must click first.");
+                });
+            }, 500);
         }, { once: true });
-
-
-        // --- 4. Aurora Borealis Background (WebGL) ---
-        const canvas = document.getElementById('background-canvas');
-        const gl = canvas.getContext('webgl', { antialias: true });
-
-        const vertexShaderSource = `
-            attribute vec2 a_position;
-            void main() {
-                gl_Position = vec4(a_position, 0.0, 1.0);
-            }
-        `;
-
-        const fragmentShaderSource = `
-            precision highp float;
-            uniform vec2 u_resolution;
-            uniform float u_time;
-
-            float random(vec2 st) {
-                return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
-            }
-
-            float noise(vec2 st) {
-                vec2 i = floor(st);
-                vec2 f = fract(st);
-                float a = random(i);
-                float b = random(i + vec2(1.0, 0.0));
-                float c = random(i + vec2(0.0, 1.0));
-                float d = random(i + vec2(1.0, 1.0));
-                vec2 u = f * f * (3.0 - 2.0 * f);
-                return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.y * u.x;
-            }
-
-            float fbm(vec2 st) {
-                float value = 0.0;
-                float amplitude = 0.5;
-                float frequency = 0.0;
-                for (int i = 0; i < 6; i++) {
-                    value += amplitude * noise(st);
-                    st *= 2.0;
-                    amplitude *= 0.5;
-                }
-                return value;
-            }
-
-            void main() {
-                vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-                uv.x *= u_resolution.x / u_resolution.y;
-
-                float time = u_time * 0.1;
-                vec2 motion = vec2(time * 0.5, time);
-                
-                float f = fbm(uv * 2.0 + motion);
-                
-                vec3 color1 = vec3(0.1, 0.5, 0.2); // Green
-                vec3 color2 = vec3(0.8, 0.1, 0.8); // Pink/Purple
-                
-                float mixFactor = smoothstep(0.4, 0.6, f);
-                vec3 finalColor = mix(color1, color2, mixFactor);
-                
-                float vig = 1.0 - length(gl_FragCoord.xy / u_resolution.xy - 0.5) * 1.5;
-                finalColor *= vig;
-                
-                float curtain = pow(sin(uv.x * 3.0 + time * 2.0) * 0.5 + 0.5, 2.0);
-                finalColor *= (0.5 + curtain * 0.5);
-                
-                gl_FragColor = vec4(finalColor, 1.0);
-            }
-        `;
-        
-        // (The rest of the WebGL setup script is the same as before)
-        function createShader(gl, type, source) { const shader = gl.createShader(type); gl.shaderSource(shader, source); gl.compileShader(shader); if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) { console.error('Shader compile error: ' + gl.getShaderInfoLog(shader)); gl.deleteShader(shader); return null; } return shader; }
-        const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
-        const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
-        function createProgram(gl, vertexShader, fragmentShader) { const program = gl.createProgram(); gl.attachShader(program, vertexShader); gl.attachShader(program, fragmentShader); gl.linkProgram(program); if (!gl.getProgramParameter(program, gl.LINK_STATUS)) { console.error('Program link error: ' + gl.getProgramInfoLog(program)); return null; } return program; }
-        const program = createProgram(gl, vertexShader, fragmentShader);
-        const positionAttributeLocation = gl.getAttribLocation(program, "a_position");
-        const resolutionUniformLocation = gl.getUniformLocation(program, "u_resolution");
-        const timeUniformLocation = gl.getUniformLocation(program, "u_time");
-        const positionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-        function render(time) { time *= 0.001; const { innerWidth, innerHeight } = window; canvas.width = innerWidth; canvas.height = innerHeight; gl.viewport(0, 0, gl.canvas.width, gl.canvas.height); gl.useProgram(program); gl.enableVertexAttribArray(positionAttributeLocation); gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer); gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0); gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height); gl.uniform1f(timeUniformLocation, time); gl.drawArrays(gl.TRIANGLE_FAN, 0, 4); requestAnimationFrame(render); }
-        requestAnimationFrame(render);
-
     </script>
 </body>
 </html>

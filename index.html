@@ -14,27 +14,52 @@
         background: #000;
         color: #fff;
         font-family: 'Courier New', Courier, monospace;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
     }
-    .background {
+
+    /* New Animated Star Background */
+    @keyframes move-stars {
+        from { transform: translateY(0px); }
+        to { transform: translateY(-2000px); }
+    }
+    .stars, .stars2, .stars3 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+    .stars {
+        background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAAAXNSR0IArs4c6QAAAB5JREFUeNpjYBgFo2AUjIJRMApGwSgYBRO2BwA/1gH43AZw6wAAAABJRU5ErkJggg==) repeat top center;
+        z-index: 1;
+        animation: move-stars 200s linear infinite;
+    }
+    .stars2 {
+        background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAAAXNSR0IArs4c6QAAAB5JREFUeNpjYBgFo2AUjIJRMApGwSgYBRO2BwA/1gH43AZw6wAAAABJRU5ErkJggg==) repeat top center;
+        z-index: 2;
+        opacity: 0.7;
+        animation: move-stars 150s linear infinite;
+    }
+    .stars3 {
+        background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAAAXNSR0IArs4c6QAAAB5JREFUeNpjYBgFo2AUjIJRMApGwSgYBRO2BwA/1gH43AZw6wAAAABJRU5ErkJggg==) repeat top center;
+        z-index: 3;
+        opacity: 0.4;
+        animation: move-stars 100s linear infinite;
+    }
+
+    .content-container {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url('https://i.imgur.com/M6L3o2u.gif');
-        background-size: cover;
-        background-position: center;
-        animation: zoom 20s infinite;
-        z-index: -1;
-    }
-    @keyframes zoom {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.2); }
-        100% { transform: scale(1); }
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        z-index: 4;
     }
     .content {
         background: rgba(0, 0, 0, 0.7);
@@ -50,83 +75,35 @@
         font-size: 1.2em;
         line-height: 1.6em;
     }
-    button {
-        background: #fff;
-        color: #000;
-        border: none;
-        padding: 10px 20px;
-        font-size: 1em;
-        cursor: pointer;
-        border-radius: 5px;
-        margin-top: 1em;
-        transition: background 0.3s, color 0.3s;
-    }
-    button:hover {
-        background: #ccc;
-        color: #000;
-    }
-
-    /* --- New styles for the shining text --- */
     #shining-text {
         font-weight: bold;
-        font-size: 1.5em; /* Make the name bigger */
-        color: #ffffff; /* Start as white */
-        transition: all 0.5s ease-in-out;
+        font-size: 1.5em;
+        color: #ffffff;
+        animation: glowing-gold 2s infinite; /* Animation starts automatically */
     }
-
-    #shining-text.glow {
-        /* Apply the animation when the 'glow' class is added */
-        animation: glowing-gold 2s infinite;
-    }
-
-    /* --- Keyframe animation for the glow effect --- */
     @keyframes glowing-gold {
-        0% {
-            color: #FFD700; /* Gold color */
-            text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFA500;
-        }
-        50% {
-            color: #FFFFFF; /* White color */
-            text-shadow: 0 0 20px #FFD700, 0 0 30px #FFA500, 0 0 40px #FFA500;
-        }
-        100% {
-            color: #FFD700; /* Back to Gold */
-            text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFA500;
-        }
+        0% { color: #FFD700; text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFA500; }
+        50% { color: #FFFFFF; text-shadow: 0 0 20px #FFD700, 0 0 30px #FFA500, 0 0 40px #FFA500; }
+        100% { color: #FFD700; text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFA500; }
     }
-
 </style>
 </head>
 <body>
 
-<div class="background"></div>
+<div class="stars"></div>
+<div class="stars2"></div>
+<div class="stars3"></div>
 
-<div class="content">
-    <h1>For My Best Friend</h1>
-    <p>
-        A special message just for you.
-        <br>
-        <span id="shining-text">SIYA Jii</span>
-    </p>
-    <button onclick="playMusic()">Play Our Song</button>
+<div class="content-container">
+    <div class="content">
+        <h1>For My Best Friend</h1>
+        <p>
+            A special message just for you.
+            <br>
+            <span id="shining-text">SIYA Jii</span>
+        </p>
+    </div>
 </div>
-
-<audio id="background-music" src="https://github.com/hypernab/lettertothesky/raw/main/Lost_Kitten.mp3"></audio>
-
-<script>
-    function playMusic() {
-        var music = document.getElementById('background-music');
-        var text = document.getElementById('shining-text');
-        
-        if (music.paused) {
-            music.play();
-            text.classList.add('glow'); // Add the glow effect
-        } else {
-            music.pause();
-            text.classList.remove('glow'); // Remove the glow effect
-        }
-    }
-</script>
 
 </body>
 </html>

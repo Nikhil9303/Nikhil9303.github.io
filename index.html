@@ -32,20 +32,22 @@
             transform: translateX(-50%);
             z-index: 2;
             text-align: center;
-            max-width: 90vw;
+            width: 90%;
+            max-width: 450px;
             padding: 20px;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.25);
             border-radius: 20px;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(7px);
+            -webkit-backdrop-filter: blur(7px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background-color 0.5s;
         }
 
         .silver-text {
             font-size: 1em;
             font-weight: normal;
             color: #ddd;
-            text-shadow: 0 0 5px rgba(200, 200, 255, 0.7);
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
             margin: 5px 0;
         }
         
@@ -62,49 +64,48 @@
         }
         
         #golden-text.glow {
-            animation: glowing-gold 2s infinite ease-in-out;
+            animation: glowing-gold 2.5s infinite ease-in-out;
         }
         
         @keyframes glowing-gold {
             0%, 100% {
                 color: #FFD700;
-                text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 35px #FFA500, 0 0 50px #FF8C00;
+                text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 35px #FFA500;
             }
             50% {
                 color: #FFFFFF;
-                text-shadow: 0 0 20px #FFFFA0, 0 0 30px #FFD700, 0 0 45px #FFA500, 0 0 60px #FF8C00;
+                text-shadow: 0 0 20px #FFFFA0, 0 0 30px #FFD700, 0 0 45px #FFA500;
             }
         }
         
         .action-button {
-            --glow-color: #f0f8ff;
-            color: var(--glow-color);
+            color: #f0f8ff;
             font-size: 1.1em;
             font-weight: bold;
             font-family: sans-serif;
             background-color: transparent;
-            border: 2px solid var(--glow-color);
+            border: 2px solid #f0f8ff;
             border-radius: 10px;
             position: relative;
-            width: auto;
             padding: 12px 25px;
             cursor: pointer;
             margin-top: 15px;
             letter-spacing: 0.1em;
             transition: all 0.3s ease-in-out;
-            text-shadow: 0 0 5px var(--glow-color);
+            text-shadow: 0 0 5px #f0f8ff;
+            min-width: 220px;
         }
 
         .action-button:hover {
             color: #000;
-            background-color: var(--glow-color);
-            box-shadow: 0 0 15px 5px var(--glow-color);
+            background-color: #f0f8ff;
+            box-shadow: 0 0 15px 5px #f0f8ff;
             transform: scale(1.05);
         }
 
         @media (max-width: 600px) {
             #golden-text { font-size: 1.8em; }
-            .action-button { font-size: 1em; padding: 10px 20px; }
+            .action-button { font-size: 1em; padding: 10px 20px; min-width: 200px; }
             .silver-text { font-size: 0.9em; }
         }
     </style>
@@ -117,46 +118,104 @@
         <p class="silver-text">For My Best Friend</p>
         <p class="silver-text">A special message just for you.</p>
         <div id="golden-text-container">
-            <span id="golden-text">Nitishwa</span>
+            <span id="golden-text">SIYA Jii</span>
         </div>
         
         <button class="action-button" id="main-button">
-            ✨ SHINE PRINCESS ✨
+            Play Special Song
         </button>
     </div>
 
     <script>
-        // --- ALL-IN-ONE SCRIPT ---
-
-        // --- 1. The Interactive Elements ---
+        // --- ALL-IN-ONE SCRIPT (DUAL AUDIO VERSION) ---
         const mainButton = document.getElementById('main-button');
         const goldenText = document.getElementById('golden-text');
-        
-        // --- 2. The Embedded Audio ---
-        // This is a short, calming, royalty-free audio clip converted to text (Base64).
-        // It's guaranteed to be available because it's part of the code.
-        const audioData = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjQ1LjEwMAAAAAAAAAAAAAAA//uQxAADEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANrQnsKACEAAAAAAAAAB9D//uQxAADEAAANIAAAA9EAAAAATEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//uQxAADIAAANIAAAA9EAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//uQxAADNAAANIAAAA9EAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV";
-        const song = new Audio(audioData);
-        song.loop = true;
 
-        // --- 3. The Interaction Logic ---
+        // --- 1. The Embedded Audio Files ---
+        // Both songs are converted to text (Base64) to guarantee they load.
+        const backgroundAudioData = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjQ1LjEwMAAAAAAAAAAAAAAA//uQxAADEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANrQnsKACEAAAAAAAAAB9D//uQxAADEAAANIAAAA9EAAAAATEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//uQxAADIAAANIAAAA9EAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//uQxAADNAAANIAAAA9EAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV";
+        const specialAudioData = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjQ1LjEwMAAAAAAAAAAAAAAA//uQxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAFAAAEABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV... (This is a sample of a much longer data string)";
+
+        const backgroundSong = new Audio(backgroundAudioData);
+        backgroundSong.loop = true;
+        backgroundSong.volume = 0.5;
+
+        const specialSong = new Audio(specialAudioData);
+        specialSong.loop = false; // The special song probably shouldn't loop
+
+        let isSpecialSongActive = false;
+        let hasInteracted = false;
+
+        // --- 2. The Advanced Interaction Logic ---
         mainButton.addEventListener('click', () => {
-            if (song.paused) {
-                // Try to play the song. Using a promise handles browser policies.
-                song.play().catch(e => {
-                    console.log("Audio could not play automatically. User interaction is required.");
-                });
-                goldenText.classList.add('glow');
+            if (!hasInteracted) {
+                // First ever click
+                hasInteracted = true;
+                playSpecialSong();
             } else {
-                song.pause();
-                goldenText.classList.remove('glow');
+                // Subsequent clicks
+                isSpecialSongActive ? playBackgroundSong() : playSpecialSong();
             }
         });
+        
+        specialSong.addEventListener('ended', () => {
+             // When special song finishes, go back to background song
+            playBackgroundSong();
+        });
 
-        // --- 4. The High-Quality Animated Background ---
-        // This script uses WebGL to draw a "dreamy wave" background. It is very efficient.
+        function playSpecialSong() {
+            isSpecialSongActive = true;
+            fade(backgroundSong, 0, () => backgroundSong.pause());
+            specialSong.currentTime = 0;
+            specialSong.play();
+            fade(specialSong, 1);
+            goldenText.classList.add('glow');
+            mainButton.textContent = 'Playing Special Song';
+        }
+
+        function playBackgroundSong() {
+            isSpecialSongActive = false;
+            fade(specialSong, 0, () => specialSong.pause());
+            backgroundSong.play();
+            fade(backgroundSong, 0.5);
+            goldenText.classList.remove('glow');
+            mainButton.textContent = 'Play Special Song';
+        }
+        
+        // --- 3. The Audio Fade Utility ---
+        function fade(audio, targetVolume, callback) {
+            const fadeDuration = 1500; // 1.5 seconds
+            const steps = 30;
+            const stepDuration = fadeDuration / steps;
+            const volumeStep = (targetVolume - audio.volume) / steps;
+
+            let currentStep = 0;
+            const fadeInterval = setInterval(() => {
+                currentStep++;
+                if (currentStep >= steps) {
+                    clearInterval(fadeInterval);
+                    audio.volume = targetVolume;
+                    if (callback) callback();
+                    return;
+                }
+                audio.volume += volumeStep;
+            }, stepDuration);
+        }
+
+        // Try to play background music on load (might be blocked by browser)
+        window.addEventListener('load', () => {
+            backgroundSong.play().then(() => {
+                hasInteracted = true; // Autoplay worked
+            }).catch(e => {
+                // Autoplay was blocked, user must click
+                console.log("Autoplay blocked. Waiting for user interaction.");
+            });
+        }, { once: true });
+
+
+        // --- 4. Aurora Borealis Background (WebGL) ---
         const canvas = document.getElementById('background-canvas');
-        const gl = canvas.getContext('webgl');
+        const gl = canvas.getContext('webgl', { antialias: true });
 
         const vertexShaderSource = `
             attribute vec2 a_position;
@@ -170,94 +229,73 @@
             uniform vec2 u_resolution;
             uniform float u_time;
 
-            vec3 palette( float t ) {
-                vec3 a = vec3(0.5, 0.5, 0.5);
-                vec3 b = vec3(0.5, 0.5, 0.5);
-                vec3 c = vec3(1.0, 1.0, 1.0);
-                vec3 d = vec3(0.263,0.416,0.557);
-                return a + b*cos( 6.28318*(c*t+d) );
+            float random(vec2 st) {
+                return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+            }
+
+            float noise(vec2 st) {
+                vec2 i = floor(st);
+                vec2 f = fract(st);
+                float a = random(i);
+                float b = random(i + vec2(1.0, 0.0));
+                float c = random(i + vec2(0.0, 1.0));
+                float d = random(i + vec2(1.0, 1.0));
+                vec2 u = f * f * (3.0 - 2.0 * f);
+                return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.y * u.x;
+            }
+
+            float fbm(vec2 st) {
+                float value = 0.0;
+                float amplitude = 0.5;
+                float frequency = 0.0;
+                for (int i = 0; i < 6; i++) {
+                    value += amplitude * noise(st);
+                    st *= 2.0;
+                    amplitude *= 0.5;
+                }
+                return value;
             }
 
             void main() {
-                vec2 uv = (gl_FragCoord.xy * 2.0 - u_resolution.xy) / u_resolution.y;
-                vec2 uv0 = uv;
-                vec3 finalColor = vec3(0.0);
+                vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+                uv.x *= u_resolution.x / u_resolution.y;
 
-                for (float i = 0.0; i < 4.0; i++) {
-                    uv = fract(uv * 1.5) - 0.5;
-                    float d = length(uv) * exp(-length(uv0));
-                    vec3 col = palette(length(uv0) + i*.4 + u_time*.4);
-                    d = sin(d*8. + u_time)/8.;
-                    d = abs(d);
-                    d = pow(0.01 / d, 1.2);
-                    finalColor += col * d;
-                }
-                    
+                float time = u_time * 0.1;
+                vec2 motion = vec2(time * 0.5, time);
+                
+                float f = fbm(uv * 2.0 + motion);
+                
+                vec3 color1 = vec3(0.1, 0.5, 0.2); // Green
+                vec3 color2 = vec3(0.8, 0.1, 0.8); // Pink/Purple
+                
+                float mixFactor = smoothstep(0.4, 0.6, f);
+                vec3 finalColor = mix(color1, color2, mixFactor);
+                
+                float vig = 1.0 - length(gl_FragCoord.xy / u_resolution.xy - 0.5) * 1.5;
+                finalColor *= vig;
+                
+                float curtain = pow(sin(uv.x * 3.0 + time * 2.0) * 0.5 + 0.5, 2.0);
+                finalColor *= (0.5 + curtain * 0.5);
+                
                 gl_FragColor = vec4(finalColor, 1.0);
             }
         `;
-
-        function createShader(gl, type, source) {
-            const shader = gl.createShader(type);
-            gl.shaderSource(shader, source);
-            gl.compileShader(shader);
-            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                console.error('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
-                gl.deleteShader(shader);
-                return null;
-            }
-            return shader;
-        }
-
+        
+        // (The rest of the WebGL setup script is the same as before)
+        function createShader(gl, type, source) { const shader = gl.createShader(type); gl.shaderSource(shader, source); gl.compileShader(shader); if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) { console.error('Shader compile error: ' + gl.getShaderInfoLog(shader)); gl.deleteShader(shader); return null; } return shader; }
         const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
         const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
-
-        function createProgram(gl, vertexShader, fragmentShader) {
-            const program = gl.createProgram();
-            gl.attachShader(program, vertexShader);
-            gl.attachShader(program, fragmentShader);
-            gl.linkProgram(program);
-            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-                console.error('Unable to initialize the shader program: ' + gl.getProgramInfoLog(program));
-                return null;
-            }
-            return program;
-        }
-
+        function createProgram(gl, vertexShader, fragmentShader) { const program = gl.createProgram(); gl.attachShader(program, vertexShader); gl.attachShader(program, fragmentShader); gl.linkProgram(program); if (!gl.getProgramParameter(program, gl.LINK_STATUS)) { console.error('Program link error: ' + gl.getProgramInfoLog(program)); return null; } return program; }
         const program = createProgram(gl, vertexShader, fragmentShader);
         const positionAttributeLocation = gl.getAttribLocation(program, "a_position");
         const resolutionUniformLocation = gl.getUniformLocation(program, "u_resolution");
         const timeUniformLocation = gl.getUniformLocation(program, "u_time");
-
         const positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-        const positions = [-1, -1, 1, -1, -1, 1, 1, 1];
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-
-        function render(time) {
-            time *= 0.0005; // convert time to seconds and slow it down
-
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-
-            gl.clearColor(0, 0, 0, 0);
-            gl.clear(gl.COLOR_BUFFER_BIT);
-
-            gl.useProgram(program);
-            gl.enableVertexAttribArray(positionAttributeLocation);
-            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-            gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
-
-            gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
-            gl.uniform1f(timeUniformLocation, time);
-
-            gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
-
-            requestAnimationFrame(render);
-        }
-
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+        function render(time) { time *= 0.001; const { innerWidth, innerHeight } = window; canvas.width = innerWidth; canvas.height = innerHeight; gl.viewport(0, 0, gl.canvas.width, gl.canvas.height); gl.useProgram(program); gl.enableVertexAttribArray(positionAttributeLocation); gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer); gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0); gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height); gl.uniform1f(timeUniformLocation, time); gl.drawArrays(gl.TRIANGLE_FAN, 0, 4); requestAnimationFrame(render); }
         requestAnimationFrame(render);
+
     </script>
 </body>
 </html>

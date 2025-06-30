@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Letter to the Sky</title>
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+        color: #fff;
+        font-family: 'Courier New', Courier, monospace;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+    .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('https://i.imgur.com/M6L3o2u.gif');
+        background-size: cover;
+        background-position: center;
+        animation: zoom 20s infinite;
+        z-index: -1;
+    }
+    @keyframes zoom {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+    }
+    .content {
+        background: rgba(0, 0, 0, 0.7);
+        padding: 2em;
+        border-radius: 10px;
+        max-width: 80%;
+    }
+    h1 {
+        font-size: 2.5em;
+        margin-bottom: 0.5em;
+    }
+    p {
+        font-size: 1.2em;
+        line-height: 1.6em;
+    }
+    button {
+        background: #fff;
+        color: #000;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1em;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-top: 1em;
+        transition: background 0.3s, color 0.3s;
+    }
+    button:hover {
+        background: #ccc;
+        color: #000;
+    }
+
+    /* --- New styles for the shining text --- */
+    #shining-text {
+        font-weight: bold;
+        font-size: 1.5em; /* Make the name bigger */
+        color: #ffffff; /* Start as white */
+        transition: all 0.5s ease-in-out;
+    }
+
+    #shining-text.glow {
+        /* Apply the animation when the 'glow' class is added */
+        animation: glowing-gold 2s infinite;
+    }
+
+    /* --- Keyframe animation for the glow effect --- */
+    @keyframes glowing-gold {
+        0% {
+            color: #FFD700; /* Gold color */
+            text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFA500;
+        }
+        50% {
+            color: #FFFFFF; /* White color */
+            text-shadow: 0 0 20px #FFD700, 0 0 30px #FFA500, 0 0 40px #FFA500;
+        }
+        100% {
+            color: #FFD700; /* Back to Gold */
+            text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFA500;
+        }
+    }
+
+</style>
+</head>
+<body>
+
+<div class="background"></div>
+
+<div class="content">
+    <h1>For My Best Friend</h1>
+    <p>
+        A special message just for you.
+        <br>
+        <span id="shining-text">SIYA Jii</span>
+    </p>
+    <button onclick="playMusic()">Play Our Song</button>
+</div>
+
+<audio id="background-music" src="https://github.com/hypernab/lettertothesky/raw/main/Lost_Kitten.mp3"></audio>
+
+<script>
+    function playMusic() {
+        var music = document.getElementById('background-music');
+        var text = document.getElementById('shining-text');
+        
+        if (music.paused) {
+            music.play();
+            text.classList.add('glow'); // Add the glow effect
+        } else {
+            music.pause();
+            text.classList.remove('glow'); // Remove the glow effect
+        }
+    }
+</script>
+
+</body>
+</html>

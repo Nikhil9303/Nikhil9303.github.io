@@ -16,7 +16,6 @@
         font-family: 'Courier New', Courier, monospace;
     }
 
-    /* Canvas for the new starfield background */
     #starfield-canvas {
         position: fixed;
         top: 0;
@@ -33,25 +32,37 @@
         z-index: 2;
         text-align: right;
         max-width: 90vw;
-        padding: 2em;
+        padding: 2px; /* Reduced padding for border */
         border: 2px solid transparent;
         border-radius: 12px;
         transition: all 0.5s ease-in-out;
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(5px);
     }
     
     @keyframes pulse-border {
-        0%, 100% { border-color: #aaa; box-shadow: 0 0 10px #aaa, inset 0 0 10px #aaa; }
-        50% { border-color: #fff; box-shadow: 0 0 20px #fff, inset 0 0 15px #fff; }
+        0%, 100% { border-color: #aaa; box-shadow: 0 0 10px #aaa; }
+        50% { border-color: #fff; box-shadow: 0 0 20px #fff; }
     }
     .message-container.bordered {
         animation: pulse-border 4s infinite;
     }
 
+    /* Inner content now has transparent background */
+    .inner-content {
+        background: transparent; 
+        padding: 2em;
+        border-radius: 10px;
+    }
+
+    /* New twinkle animation for text */
+    @keyframes twinkle {
+        0%, 100% { opacity: 1; text-shadow: 0 0 5px #fff; }
+        50% { opacity: 0.7; text-shadow: 0 0 10px #fff; }
+    }
+
     .silver-shine {
         font-size: 0.9em;
         color: #ddd;
+        animation: twinkle 3s infinite ease-in-out; /* Applied new animation */
     }
     
     #shining-text {
@@ -100,13 +111,15 @@
 <canvas id="starfield-canvas"></canvas>
 
 <div class="message-container" id="message-box">
-    <p class="silver-shine">For My Best Friend</p>
-    <p class="silver-shine">A special message just for you.</p>
-    <p><span id="shining-text">SIYA Jii</span></p>
-    
-    <button class="glowing-btn" onclick="startAnimations()">
-        * SHINE PRINCESS *
-    </button>
+    <div class="inner-content">
+        <p class="silver-shine">For My Best Friend</p>
+        <p class="silver-shine">A special message just for you.</p>
+        <p><span id="shining-text">SIYA Jii</span></p>
+        
+        <button class="glowing-btn" onclick="startAnimations()">
+            * SHINE PRINCESS *
+        </button>
+    </div>
 </div>
 
 <audio id="feature-music" src="https://cdn.pixabay.com/download/audio/2022/11/22/audio_51b9a98299.mp3" loop></audio>
@@ -128,7 +141,7 @@
         }
     }
 
-    // --- New JavaScript Starfield Background ---
+    // JavaScript Starfield Background
     const canvas = document.getElementById('starfield-canvas');
     const ctx = canvas.getContext('2d');
 
@@ -173,4 +186,3 @@
 
 </body>
 </html>
-

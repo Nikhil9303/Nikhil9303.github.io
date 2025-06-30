@@ -22,19 +22,41 @@
             font-family: 'Garamond', 'Times New Roman', serif;
         }
 
-        #video-background {
+        /* NEW: Pure CSS Aurora Background */
+        #aurora-background {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: 1;
-            transform: translateX(-50%) translateY(-50%);
-            object-fit: cover;
-            opacity: 0.7;
+            background: linear-gradient(
+                175deg,
+                rgba(13, 2, 33, 0), 
+                rgba(13, 2, 33, 0) 40%, 
+                #05d5e8 48%, 
+                #05e8a3 50%, 
+                #f5e634 52%, 
+                rgba(13, 2, 33, 0) 60%, 
+                rgba(13, 2, 33, 0) 100%
+            ),
+            linear-gradient(
+                200deg,
+                rgba(13, 2, 33, 0) 20%, 
+                var(--glow-pink) 50%, 
+                var(--dark-blue) 70%, 
+                rgba(13, 2, 33, 0) 90%
+            );
+            background-size: 200% 200%;
+            animation: aurora-flow 20s linear infinite;
         }
+
+        @keyframes aurora-flow {
+            0% { background-position: 50% 0%; }
+            50% { background-position: 50% 100%; }
+            100% { background-position: 50% 0%; }
+        }
+
 
         .message-container-wrapper {
             position: fixed;
@@ -62,7 +84,7 @@
 
         .message-container {
             padding: 20px;
-            background: rgba(13, 2, 33, 0.7); /* dark-blue with opacity */
+            background: rgba(13, 2, 33, 0.8);
             border-radius: 22px;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -138,7 +160,7 @@
 </head>
 <body>
 
-    <video autoplay muted loop playsinline id="video-background" src="https://cdn.pixabay.com/video/2022/09/23/131059-755109559_large.mp4"></video>
+    <div id="aurora-background"></div>
 
     <div class="message-container-wrapper">
         <div class="message-container">
@@ -158,9 +180,9 @@
         const mainButton = document.getElementById('main-button');
         const goldenText = document.getElementById('golden-text');
 
-        // Audio files are still embedded to guarantee they load
+        // Audio files are embedded to guarantee they load
         const backgroundAudioData = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjQ1LjEwMAAAAAAAAAAAAAAA//uQxAADEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANrQnsKACEAAAAAAAAAB9D//uQxAADEAAANIAAAA9EAAAAATEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//uQxAADIAAANIAAAA9EAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//uQxAADNAAANIAAAA9EAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV";
-        const specialAudioData = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjQ1LjEwMAAAAAAAAAAAAAAA//uQxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAFAAAEABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV... (Placeholder)";
+        const specialAudioData = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjQ1LjEwMAAAAAAAAAAAAAAA//uQxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAFAAAEABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV... (Placeholder)";
 
         const backgroundSong = new Audio(backgroundAudioData);
         backgroundSong.loop = true;
@@ -170,76 +192,34 @@
         specialSong.loop = false;
 
         let isSpecialSongActive = false;
-        let hasInteracted = false;
-
-        function initializeAudio() {
-            if (hasInteracted) return;
-            backgroundSong.play().catch(e => {});
-            specialSong.play().catch(e => {});
-            backgroundSong.pause();
-            specialSong.pause();
-            hasInteracted = true;
-        }
-        
-        document.body.addEventListener('click', initializeAudio, { once: true });
         
         mainButton.addEventListener('click', () => {
-            if (!hasInteracted) initializeAudio();
-            isSpecialSongActive ? playBackgroundSong() : playSpecialSong();
+            if (isSpecialSongActive) {
+                // If special song is active, switch to background song
+                specialSong.pause();
+                backgroundSong.play().catch(e => console.log("BG audio failed"));
+                goldenText.classList.remove('glow');
+                mainButton.textContent = 'Play Special Song';
+                isSpecialSongActive = false;
+            } else {
+                // If background song is active (or nothing is), switch to special song
+                backgroundSong.pause();
+                specialSong.currentTime = 0;
+                specialSong.play().catch(e => console.log("Special audio failed"));
+                goldenText.classList.add('glow');
+                mainButton.textContent = 'Playing Special Song';
+                isSpecialSongActive = true;
+            }
         });
         
         specialSong.addEventListener('ended', () => {
-            playBackgroundSong();
-        });
-
-        function playSpecialSong() {
-            isSpecialSongActive = true;
-            fade(backgroundSong, 0, () => backgroundSong.pause());
-            specialSong.currentTime = 0;
-            specialSong.play();
-            fade(specialSong, 1);
-            goldenText.classList.add('glow');
-            mainButton.textContent = 'Playing Special Song';
-        }
-
-        function playBackgroundSong() {
-            isSpecialSongActive = false;
-            fade(specialSong, 0, () => specialSong.pause());
-            backgroundSong.play();
-            fade(backgroundSong, 0.4);
+            // When special song finishes, automatically go back to background song
             goldenText.classList.remove('glow');
             mainButton.textContent = 'Play Special Song';
-        }
-        
-        function fade(audio, targetVolume, callback) {
-            const fadeDuration = 1500;
-            const steps = 30;
-            const stepDuration = fadeDuration / steps;
-            if(audio.volume === targetVolume) {
-                if(callback) callback();
-                return;
-            }
-            const volumeStep = (targetVolume - audio.volume) / steps;
-            let currentStep = 0;
-            const fadeInterval = setInterval(() => {
-                currentStep++;
-                if (currentStep >= steps) {
-                    clearInterval(fadeInterval);
-                    audio.volume = targetVolume;
-                    if (callback) callback();
-                    return;
-                }
-                audio.volume += volumeStep;
-            }, stepDuration);
-        }
+            isSpecialSongActive = false;
+            backgroundSong.play().catch(e => console.log("BG audio failed"));
+        });
 
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                backgroundSong.play().catch(e => {
-                    console.log("Autoplay blocked. User must click to start audio.");
-                });
-            }, 500);
-        }, { once: true });
     </script>
 </body>
 </html>

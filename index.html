@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>A Letter to the Sky</title>
 <style>
     body, html {
@@ -16,94 +16,40 @@
         font-family: 'Courier New', Courier, monospace;
     }
 
-    /* Animated Star Background */
-    @keyframes move-stars {
-        from { transform: translateY(0px); }
-        to { transform: translateY(-2000px); }
-    }
-    .stars, .stars2, .stars3 {
-        position: absolute;
+    #background-canvas {
+        position: fixed;
         top: 0;
         left: 0;
-        right: 0;
-        bottom: 0;
         width: 100%;
         height: 100%;
-        display: block;
-    }
-    .stars {
-        background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAAAXNSR0IArs4c6QAAAB5JREFUeNpjYBgFo2AUjIJRMApGwSgYBRO2BwA/1gH43AZw6wAAAABJRU5ErkJggg==) repeat top center;
         z-index: 1;
-        animation: move-stars 200s linear infinite;
     }
-    .stars2 {
-        background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAAAXNSR0IArs4c6QAAAB5JREFUeNpjYBgFo2AUjIJRMApGwSgYBRO2BwA/1gH43AZw6wAAAABJRU5ErkJggg==) repeat top center;
+
+    .message-container {
+        position: fixed;
+        bottom: 5vh;
+        right: 5vw;
         z-index: 2;
-        opacity: 0.7;
-        animation: move-stars 150s linear infinite;
-    }
-    .stars3 {
-        background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAAAXNSR0IArs4c6QAAAB5JREFUeNpjYBgFo2AUjIJRMApGwSgYBRO2BwA/1gH43AZw6wAAAABJRU5ErkJggg==) repeat top center;
-        z-index: 3;
-        opacity: 0.4;
-        animation: move-stars 100s linear infinite;
+        text-align: right;
+        max-width: 90vw;
     }
 
-    .content-container {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        z-index: 4;
+    /* New silver shine text styling */
+    .silver-shine {
+        font-size: 0.9em; /* Smaller, cute type */
+        font-weight: normal;
+        color: #ccc;
+        animation: silver-pulse 4s infinite;
+    }
+
+    @keyframes silver-pulse {
+        0%, 100% { text-shadow: 0 0 3px #fff, 0 0 5px #fff, 0 0 8px #a9a9a9; }
+        50% { text-shadow: 0 0 5px #fff, 0 0 8px #fff, 0 0 12px #a9a9a9; }
     }
     
-    /* Animated Border Styles */
-    @property --angle {
-        syntax: '<angle>';
-        initial-value: 0deg;
-        inherits: false;
-    }
-
-    @keyframes rotate {
-        to { --angle: 360deg; }
-    }
-
-    .content {
-        --angle: 0deg;
-        width: 80%;
-        max-width: 500px;
-        padding: 3px;
-        background-image: conic-gradient(from var(--angle), #003366, #4d94ff, #80bfff, #4d94ff, #003366);
-        border-radius: 12px;
-    }
-    
-    /* Added a class to control the animation */
-    .content.animated {
-        animation: rotate 4s linear infinite;
-    }
-
-    .inner-content {
-        background: rgba(0, 0, 0, 0.85);
-        padding: 2em;
-        border-radius: 10px;
-    }
-
-    h1 {
-        font-size: 2.5em;
-        margin-bottom: 0.5em;
-    }
-    p {
-        font-size: 1.2em;
-        line-height: 1.6em;
-    }
     #shining-text {
         font-weight: bold;
-        font-size: 1.5em;
+        font-size: 1.5em; /* Siya Jii remains larger */
         color: #ffffff;
     }
     
@@ -116,103 +62,187 @@
         50% { color: #FFFFFF; text-shadow: 0 0 20px #FFD700, 0 0 30px #FFA500, 0 0 40px #FFA500; }
         100% { color: #FFD700; text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFA500; }
     }
-
-    /* --- NEW --- Animated Button Styles --- */
+    
     .glowing-btn {
+        --glow-color: #ccc; /* Changed to silver */
+        --btn-color: #000;
+        color: var(--glow-color);
+        font-size: 1em;
+        font-weight: bold;
+        background-color: transparent;
+        border: 0.15em solid var(--glow-color);
+        border-radius: 0.5em;
         position: relative;
-        color: #a942ec;
+        width: auto;
+        padding: 0.6em 1.5em;
         cursor: pointer;
-        padding: 0.35em 1em;
-        border: 0.15em solid #a942ec;
-        border-radius: 0.45em;
-        background: none;
-        perspective: 2em;
-        font-family: "Raleway", sans-serif;
-        font-size: 1.5em;
-        font-weight: 900;
-        letter-spacing: 0.5em;
-        box-shadow: inset 0px 0px 0.5em 0px #a942ec, 0px 0px 0.5em 0px #a942ec;
-        margin-top: 1em;
-    }
-
-    .glowing-btn::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        opacity: 0.7;
-        filter: blur(1em);
-        transform: translateY(120%) rotateX(95deg) scale(1, 0.35);
-        background: #a942ec;
-        pointer-events: none;
-    }
-
-    .glowing-btn::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        opacity: 0;
-        z-index: -1;
-        background-color: #a942ec;
-        box-shadow: 0 0 2em 0.2em #a942ec;
-        transition: opacity 100ms linear;
+        margin-top: 1.5em;
+        letter-spacing: 0.1em;
+        transition: all 0.3s;
+        overflow: hidden;
     }
 
     .glowing-btn:hover {
-        color: rgba(0, 0, 0, 0.8);
-        text-shadow: none;
-    }
-
-    .glowing-btn:hover:after {
-        opacity: 1;
+        color: #000;
+        background-color: var(--glow-color);
+        box-shadow: 0 0 1em 0.2em var(--glow-color);
     }
 
 </style>
 </head>
 <body>
 
-<div class="stars"></div>
-<div class="stars2"></div>
-<div class="stars3"></div>
+<canvas id="background-canvas"></canvas>
 
-<div class="content-container">
-    <div class="content" id="content-box">
-        <div class="inner-content">
-            <h1>For My Best Friend</h1>
-            <p>
-                A special message just for you.
-                <br>
-                <span id="shining-text">SIYA Jii</span>
-            </p>
-            <button class="glowing-btn" onclick="startAnimations()">Play</button>
-        </div>
-    </div>
+<div class="message-container">
+    <p class="silver-shine">For My Best Friend</p>
+    <p class="silver-shine">A special message just for you.</p>
+    <p><span id="shining-text">SIYA Jii</span></p>
+    
+    <button class="glowing-btn" onclick="startAnimations()">
+        * SHINE PRINCESS *
+    </button>
 </div>
 
-<audio id="background-music" src="music.mp3"></audio>
+<audio id="background-music" src="https://cdn.pixabay.com/download/audio/2022/11/22/audio_51b9a98299.mp3" loop></audio>
 
 <script>
-    // Updated JavaScript to control all animations
     function startAnimations() {
-        var music = document.getElementById('background-music');
-        var text = document.getElementById('shining-text');
-        var contentBox = document.getElementById('content-box');
+        const music = document.getElementById('background-music');
+        const text = document.getElementById('shining-text');
         
         if (music.paused) {
             music.play();
             text.classList.add('glow');
-            contentBox.classList.add('animated');
         } else {
             music.pause();
             text.classList.remove('glow');
-            contentBox.classList.remove('animated');
         }
     }
+
+    // --- New 3D Wireframe Sphere Background Script ---
+    const canvas = document.getElementById('background-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    let spheres = [];
+    const sphereCount = 5;
+    const vertices = 12; 
+    const radius = Math.min(width, height) * 0.1;
+
+    let motion = { x: 0, y: 0 };
+
+    function createSphere(x, y, z, r) {
+        const points = [];
+        for (let i = 0; i < vertices; i++) {
+            for (let j = 0; j < vertices; j++) {
+                const theta = i / vertices * Math.PI * 2;
+                const phi = j / vertices * Math.PI;
+                points.push({
+                    x: r * Math.sin(phi) * Math.cos(theta),
+                    y: r * Math.sin(phi) * Math.sin(theta),
+                    z: r * Math.cos(phi)
+                });
+            }
+        }
+        return { x, y, z, points, rotation: { x: Math.random() * 0.01, y: Math.random() * 0.01 } };
+    }
+
+    function setup() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        spheres = [];
+        for (let i = 0; i < sphereCount; i++) {
+            spheres.push(createSphere(
+                Math.random() * width, 
+                Math.random() * height,
+                Math.random() * width - width / 2,
+                radius * (Math.random() * 0.5 + 0.5)
+            ));
+        }
+    }
+
+    function project(p, sphere) {
+        const fov = width * 0.8;
+        const projectedZ = p.z + sphere.z + fov - motion.y * 2;
+        const scale = fov / projectedZ;
+        return {
+            x: (p.x + sphere.x - width / 2 - motion.x) * scale + width / 2,
+            y: (p.y + sphere.y - height / 2) * scale + height / 2,
+            scale: scale
+        };
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, width, height);
+        
+        spheres.forEach(sphere => {
+            const rotatedPoints = sphere.points.map(p => {
+                // Rotate around Y axis
+                let x = p.x * Math.cos(sphere.rotation.y) - p.z * Math.sin(sphere.rotation.y);
+                let z = p.x * Math.sin(sphere.rotation.y) + p.z * Math.cos(sphere.rotation.y);
+                // Rotate around X axis
+                let y = p.y * Math.cos(sphere.rotation.x) - z * Math.sin(sphere.rotation.x);
+                z = p.y * Math.sin(sphere.rotation.x) + z * Math.cos(sphere.rotation.x);
+                return { x, y, z };
+            });
+
+            const projectedPoints = rotatedPoints.map(p => project(p, sphere));
+
+            ctx.strokeStyle = `rgba(200, 200, 200, 0.3)`;
+            ctx.lineWidth = 1;
+            
+            for (let i = 0; i < projectedPoints.length; i++) {
+                for (let j = i + 1; j < projectedPoints.length; j++) {
+                    const p1 = projectedPoints[i];
+                    const p2 = projectedPoints[j];
+                    const dx = rotatedPoints[i].x - rotatedPoints[j].x;
+                    const dy = rotatedPoints[i].y - rotatedPoints[j].y;
+                    const dz = rotatedPoints[i].z - rotatedPoints[j].z;
+                    const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+                    if (dist < radius * 0.8) {
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            sphere.rotation.x += 0.001;
+            sphere.rotation.y += 0.001;
+        });
+
+        requestAnimationFrame(draw);
+    }
+    
+    function handleOrientation(event) {
+        const beta = event.beta; // Front-back tilt (-180 to 180)
+        const gamma = event.gamma; // Left-right tilt (-90 to 90)
+        motion.x = gamma * 5;
+        motion.y = beta * 3;
+    }
+    
+    function requestMotionPermission() {
+        if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+            DeviceOrientationEvent.requestPermission()
+                .then(permissionState => {
+                    if (permissionState === 'granted') {
+                        window.addEventListener('deviceorientation', handleOrientation);
+                    }
+                })
+                .catch(console.error);
+        } else {
+            window.addEventListener('deviceorientation', handleOrientation);
+        }
+        document.body.removeEventListener('click', requestMotionPermission);
+    }
+
+    document.body.addEventListener('click', requestMotionPermission, { once: true });
+    window.addEventListener('resize', setup);
+    setup();
+    draw();
+
 </script>
 
 </body>

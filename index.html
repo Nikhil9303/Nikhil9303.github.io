@@ -11,40 +11,26 @@
         width: 100%;
         height: 100%;
         overflow: hidden;
-        background: #000;
         color: #fff;
         font-family: 'Courier New', Courier, monospace;
     }
 
-    /* New, reliable starfield background */
-    @keyframes move-stars {
-        from { transform: translateY(0px); }
-        to { transform: translateY(-1000px); }
-    }
-    .stars, .stars2, .stars3 {
-        position: absolute;
+    /* New Dreamy Wave Background */
+    #background-container {
+        position: fixed;
         top: 0;
         left: 0;
-        right: 0;
-        bottom: 0;
         width: 100%;
-        height: 200%; /* Made taller for continuous scroll */
-        display: block;
+        height: 100%;
         z-index: 1;
+        background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1c3d52);
+        background-size: 400% 400%;
+        animation: gradient-wave 15s ease infinite;
     }
-    .stars {
-        background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAAAXNSR0IArs4c6QAAAB5JREFUeNpjYBgFo2AUjIJRMApGwSgYBRO2BwA/1gH43AZw6wAAAABJRU5ErkJggg==) repeat top center;
-        animation: move-stars 100s linear infinite;
-    }
-    .stars2 {
-        background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAAAXNSR0IArs4c6QAAAB5JREFUeNpjYBgFo2AUjIJRMApGwSgYBRO2BwA/1gH43AZw6wAAAABJRU5ErkJggg==) repeat top center;
-        opacity: 0.7;
-        animation: move-stars 75s linear infinite;
-    }
-    .stars3 {
-        background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAAAXNSR0IArs4c6QAAAB5JREFUeNpjYBgFo2AUjIJRMApGwSgYBRO2BwA/1gH43AZw6wAAAABJRU5ErkJggg==) repeat top center;
-        opacity: 0.4;
-        animation: move-stars 50s linear infinite;
+    @keyframes gradient-wave {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
 
     .message-container {
@@ -54,18 +40,35 @@
         z-index: 2;
         text-align: right;
         max-width: 90vw;
+        padding: 2em;
+        border-radius: 12px;
+        transition: all 0.5s ease-in-out;
+    }
+    
+    /* New Glowing Silver Border */
+    @property --angle {
+        syntax: '<angle>';
+        initial-value: 0deg;
+        inherits: false;
+    }
+    @keyframes rotate {
+        to { --angle: 360deg; }
+    }
+    .message-container.bordered {
+        padding: 3px;
+        background-image: conic-gradient(from var(--angle), #888, #fff, #bbb, #fff, #888);
+        animation: rotate 4s linear infinite;
+    }
+    .inner-content {
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(5px);
+        padding: 2em;
+        border-radius: 10px;
     }
 
     .silver-shine {
         font-size: 0.9em;
-        font-weight: normal;
-        color: #ccc;
-        animation: silver-pulse 4s infinite;
-    }
-
-    @keyframes silver-pulse {
-        0%, 100% { text-shadow: 0 0 3px #fff, 0 0 5px #fff, 0 0 8px #a9a9a9; }
-        50% { text-shadow: 0 0 5px #fff, 0 0 8px #fff, 0 0 12px #a9a9a9; }
+        color: #ddd;
     }
     
     #shining-text {
@@ -84,9 +87,9 @@
         100% { color: #FFD700; text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFA500; }
     }
     
+    /* New Two-Stage Button */
     .glowing-btn {
         --glow-color: #ccc;
-        --btn-color: #000;
         color: var(--glow-color);
         font-size: 1em;
         font-weight: bold;
@@ -94,52 +97,115 @@
         border: 0.15em solid var(--glow-color);
         border-radius: 0.5em;
         position: relative;
-        width: auto;
         padding: 0.6em 1.5em;
         cursor: pointer;
         margin-top: 1.5em;
         letter-spacing: 0.1em;
-        transition: all 0.3s;
         overflow: hidden;
+        transition: all 0.3s ease;
+        animation: pulse-circuit 3s infinite; /* Initial blinking effect */
+    }
+
+    @keyframes pulse-circuit {
+        0%, 100% { box-shadow: 0 0 0.5em 0px var(--glow-color); }
+        50% { box-shadow: 0 0 1.5em 0.2em var(--glow-color); }
     }
 
     .glowing-btn:hover {
+        animation-play-state: paused; /* Stop pulsing on hover */
         color: #000;
         background-color: var(--glow-color);
-        box-shadow: 0 0 1em 0.2em var(--glow-color);
+        box-shadow: 0 0 2em 0.3em var(--glow-color);
     }
 
 </style>
 </head>
 <body>
 
-<div class="stars"></div>
-<div class="stars2"></div>
-<div class="stars3"></div>
-
-<div class="message-container">
-    <p class="silver-shine">For My Best Friend</p>
-    <p class="silver-shine">A special message just for you.</p>
-    <p><span id="shining-text">SIYA Jii</span></p>
-    
-    <button class="glowing-btn" onclick="startAnimations()">
-        * SHINE PRINCESS *
-    </button>
+<div id="background-container"></div>
+<div class="message-container" id="message-box">
+    <div class="inner-content">
+        <p class="silver-shine">For My Best Friend</p>
+        <p class="silver-shine">A special message just for you.</p>
+        <p><span id="shining-text">SIYA Jii</span></p>
+        
+        <button class="glowing-btn" onclick="startFeatureMusic()">
+            * SHINE PRINCESS *
+        </button>
+    </div>
 </div>
 
-<audio id="background-music" src="https://cdn.pixabay.com/download/audio/2022/11/22/audio_51b9a98299.mp3" loop></audio>
+<audio id="ambient-music" src="https://cdn.pixabay.com/download/audio/2022/08/04/audio_2dde62599a.mp3" loop></audio>
+<audio id="feature-music" src="https://cdn.pixabay.com/download/audio/2022/11/22/audio_51b9a98299.mp3" loop></audio>
 
 <script>
-    function startAnimations() {
-        const music = document.getElementById('background-music');
-        const text = document.getElementById('shining-text');
-        
-        if (music.paused) {
-            music.play();
+    const ambientMusic = document.getElementById('ambient-music');
+    const featureMusic = document.getElementById('feature-music');
+    const text = document.getElementById('shining-text');
+    const messageBox = document.getElementById('message-box');
+
+    // Function to fade volume
+    function fadeVolume(audio, to, duration) {
+        let startVolume = audio.volume;
+        let startTime = performance.now();
+
+        function animate() {
+            let currentTime = performance.now();
+            let elapsed = currentTime - startTime;
+            let progress = Math.min(elapsed / duration, 1);
+            audio.volume = startVolume + (to - startVolume) * progress;
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                if (to === 0) {
+                    audio.pause();
+                }
+            }
+        }
+        animate();
+    }
+
+    // Autoplay ambient music on first interaction
+    function playAmbient() {
+        ambientMusic.volume = 0;
+        ambientMusic.play().then(() => {
+            fadeVolume(ambientMusic, 0.5, 2000); // Fade in to half volume
+        }).catch(e => console.error("Ambient audio failed:", e));
+        document.body.removeEventListener('click', playAmbient);
+    }
+    document.body.addEventListener('click', playAmbient, { once: true });
+
+
+    let featureActive = false;
+    // Function to handle the button click
+    function startFeatureMusic() {
+        if (!featureActive) {
+            featureActive = true;
+            
+            // Fade out ambient, fade in feature song
+            fadeVolume(ambientMusic, 0, 1500);
+            featureMusic.volume = 0;
+            featureMusic.play().then(() => {
+                fadeVolume(featureMusic, 1.0, 2000); // Fade in to full volume
+            }).catch(e => console.error("Feature audio failed:", e));
+
+            // Activate visual effects
             text.classList.add('glow');
+            messageBox.classList.add('bordered');
         } else {
-            music.pause();
+            featureActive = false;
+
+            // Fade out feature, fade in ambient
+            fadeVolume(featureMusic, 0, 1500);
+            ambientMusic.volume = 0;
+            ambientMusic.play().then(() => {
+                fadeVolume(ambientMusic, 0.5, 2000);
+            }).catch(e => console.error("Ambient audio failed:", e));
+
+            // Deactivate visual effects
             text.classList.remove('glow');
+            messageBox.classList.remove('bordered');
         }
     }
 </script>

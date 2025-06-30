@@ -1,225 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>A Special Message</title>
-    <style>
-        :root {
-            --glow-pink: #ff007f;
-            --light-pink: #ff7fbf;
-            --dark-blue: #0d0221;
+getAttribLocation(program, "a_position");
+        const resolutionUniformLocation = gl.getUniformLocation(program, "u_resolution");
+        const timeUniformLocation = gl.getUniformLocation(program, "u_time");
+
+        const positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        const positions = [-1, -1, 1, -1, -1, 1, 1, 1];
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+        function render(time) {
+            time *= 0.0005; // convert time to seconds and slow it down
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+            gl.clearColor(0, 0, 0, 0);
+            gl.clear(gl.COLOR_BUFFER_BIT);
+
+            gl.useProgram(program);
+            gl.enableVertexAttribArray(positionAttributeLocation);
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
+
+            gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
+            gl.uniform1f(timeUniformLocation, time);
+
+            gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+
+            requestAnimationFrame(render);
         }
 
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: #000;
-            color: #fff;
-            font-family: 'Garamond', 'Times New Roman', serif;
-        }
-
-        /* NEW: Pure CSS Aurora Background */
-        #aurora-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            background: linear-gradient(
-                175deg,
-                rgba(13, 2, 33, 0), 
-                rgba(13, 2, 33, 0) 40%, 
-                #05d5e8 48%, 
-                #05e8a3 50%, 
-                #f5e634 52%, 
-                rgba(13, 2, 33, 0) 60%, 
-                rgba(13, 2, 33, 0) 100%
-            ),
-            linear-gradient(
-                200deg,
-                rgba(13, 2, 33, 0) 20%, 
-                var(--glow-pink) 50%, 
-                var(--dark-blue) 70%, 
-                rgba(13, 2, 33, 0) 90%
-            );
-            background-size: 200% 200%;
-            animation: aurora-flow 20s linear infinite;
-        }
-
-        @keyframes aurora-flow {
-            0% { background-position: 50% 0%; }
-            50% { background-position: 50% 100%; }
-            100% { background-position: 50% 0%; }
-        }
-
-
-        .message-container-wrapper {
-            position: fixed;
-            bottom: 8vh;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-            width: 90%;
-            max-width: 450px;
-            padding: 4px; /* Space for the border */
-            border-radius: 24px;
-            background: linear-gradient(var(--angle), var(--glow-pink), #4a00e0, #8e2de2, var(--glow-pink));
-            animation: rotate-border 6s linear infinite;
-        }
-
-        @property --angle {
-          syntax: '<angle>';
-          initial-value: 0deg;
-          inherits: false;
-        }
-
-        @keyframes rotate-border {
-            to { --angle: 360deg; }
-        }
-
-        .message-container {
-            padding: 20px;
-            background: rgba(13, 2, 33, 0.8);
-            border-radius: 22px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            text-align: center;
-        }
-
-        .silver-text {
-            font-size: 1em;
-            font-weight: normal;
-            color: #ddd;
-            text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
-            margin: 5px 0;
-        }
-        
-        #golden-text-container {
-            margin: 15px 0;
-        }
-
-        #golden-text {
-            font-weight: bold;
-            font-size: 2.2em;
-            color: #ffffff;
-            font-family: 'Times New Roman', serif;
-            transition: all 0.5s ease;
-        }
-        
-        #golden-text.glow {
-            animation: glowing-gold 2.5s infinite ease-in-out;
-        }
-        
-        @keyframes glowing-gold {
-            0%, 100% {
-                color: #FFD700;
-                text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 35px #FFA500;
-            }
-            50% {
-                color: #FFFFFF;
-                text-shadow: 0 0 20px #FFFFA0, 0 0 30px #FFD700, 0 0 45px #FFA500;
-            }
-        }
-        
-        .action-button {
-            color: var(--light-pink);
-            font-size: 1.1em;
-            font-weight: bold;
-            font-family: sans-serif;
-            background-color: transparent;
-            border: 2px solid var(--light-pink);
-            border-radius: 10px;
-            position: relative;
-            padding: 12px 25px;
-            cursor: pointer;
-            margin-top: 15px;
-            letter-spacing: 0.1em;
-            transition: all 0.3s ease-in-out;
-            text-shadow: 0 0 8px var(--glow-pink);
-            min-width: 220px;
-        }
-
-        .action-button:hover {
-            color: #000;
-            background-color: var(--light-pink);
-            box-shadow: 0 0 20px 5px var(--glow-pink);
-            transform: scale(1.05);
-        }
-
-        @media (max-width: 600px) {
-            #golden-text { font-size: 1.8em; }
-            .action-button { font-size: 1em; padding: 10px 20px; min-width: 200px; }
-            .silver-text { font-size: 0.9em; }
-        }
-    </style>
-</head>
-<body>
-
-    <div id="aurora-background"></div>
-
-    <div class="message-container-wrapper">
-        <div class="message-container">
-            <p class="silver-text">For My Best Friend</p>
-            <p class="silver-text">A special message just for you.</p>
-            <div id="golden-text-container">
-                <span id="golden-text">SIYA Jii</span>
-            </div>
-            
-            <button class="action-button" id="main-button">
-                Play Special Song
-            </button>
-        </div>
-    </div>
-
-    <script>
-        const mainButton = document.getElementById('main-button');
-        const goldenText = document.getElementById('golden-text');
-
-        // Audio files are embedded to guarantee they load
-        const backgroundAudioData = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjQ1LjEwMAAAAAAAAAAAAAAA//uQxAADEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANrQnsKACEAAAAAAAAAB9D//uQxAADEAAANIAAAA9EAAAAATEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//uQxAADIAAANIAAAA9EAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//uQxAADNAAANIAAAA9EAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV";
-        const specialAudioData = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjQ1LjEwMAAAAAAAAAAAAAAA//uQxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAFAAAEABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV... (Placeholder)";
-
-        const backgroundSong = new Audio(backgroundAudioData);
-        backgroundSong.loop = true;
-        backgroundSong.volume = 0.4;
-
-        const specialSong = new Audio(specialAudioData);
-        specialSong.loop = false;
-
-        let isSpecialSongActive = false;
-        
-        mainButton.addEventListener('click', () => {
-            if (isSpecialSongActive) {
-                // If special song is active, switch to background song
-                specialSong.pause();
-                backgroundSong.play().catch(e => console.log("BG audio failed"));
-                goldenText.classList.remove('glow');
-                mainButton.textContent = 'Play Special Song';
-                isSpecialSongActive = false;
-            } else {
-                // If background song is active (or nothing is), switch to special song
-                backgroundSong.pause();
-                specialSong.currentTime = 0;
-                specialSong.play().catch(e => console.log("Special audio failed"));
-                goldenText.classList.add('glow');
-                mainButton.textContent = 'Playing Special Song';
-                isSpecialSongActive = true;
-            }
-        });
-        
-        specialSong.addEventListener('ended', () => {
-            // When special song finishes, automatically go back to background song
-            goldenText.classList.remove('glow');
-            mainButton.textContent = 'Play Special Song';
-            isSpecialSongActive = false;
-            backgroundSong.play().catch(e => console.log("BG audio failed"));
-        });
-
+        requestAnimationFrame(render);
     </script>
 </body>
 </html>
